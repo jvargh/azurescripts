@@ -25,12 +25,12 @@ To run the script, you must pass the subscription ID as the first argument.
 
 ## Output
 The script outputs a table with the following columns:
-•	`Location`: The Azure region location.
-•	`DisplayName`: The display name of the region.
-•	`CurrentSqlServerCountv: The current count of SQL Servers in the region.
-•	`SqlServerQuotaLimit`: The quota limit for SQL Servers in the region.
-•	`Status`: The status of the regional capabilities for Azure SQL.
-•	`Reason`: The reason provided by Azure SQL regional capabilities, if any.
+- `Location`: The Azure region location.
+- `DisplayName`: The display name of the region.
+- `CurrentSqlServerCountv: The current count of SQL Servers in the region.
+- `SqlServerQuotaLimit`: The quota limit for SQL Servers in the region.
+- `Status`: The status of the regional capabilities for Azure SQL.
+- `Reason`: The reason provided by Azure SQL regional capabilities, if any.
 
 ## Customization
 You can modify the $skipLocations array to include or exclude different regions based on your needs.
