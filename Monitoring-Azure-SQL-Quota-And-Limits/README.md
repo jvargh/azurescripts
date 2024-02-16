@@ -10,6 +10,7 @@ To run the script, you must pass the subscription ID as the first argument.
 
 ```powershell
 .\script_name.ps1 <subscription-id>
+```
 
 ## Script Workflow
 1. `Login to Azure`: The script starts by ensuring there is a connection to an Azure account.
