@@ -18,8 +18,8 @@ To run the script, you must pass the subscription ID as the first argument.
 3. `Retrieve AAD Token`: The script then retrieves a bearer token from Azure Active Directory (AAD) for authenticating REST calls.
 4. `Get SQL Available Locations`: It fetches the locations where Azure SQL is available, excluding specified regions.
 5. `Fetch Regional Capabilities and Quotas`:
-  - For each of the available locations, the script retrieves the regional capabilities and current quota settings for Azure SQL.
-  - It uses the REST API endpoints provided in the comments to fetch the service level objectives (SLOs) and subscription quotas.
+   * For each of the available locations, the script retrieves the regional capabilities and current quota settings for Azure SQL.
+   * It uses the REST API endpoints provided in the comments to fetch the service level objectives (SLOs) and subscription quotas.
 6. `Compile Results`: The retrieved data is compiled into a custom object for each location.
 7. `Output`: The results are displayed in a table format and copied to the clipboard.
 
