@@ -52,7 +52,7 @@ foreach ($webApp in $webApps) {
         continue
     }
 
-    # REST API call to get Main Site IP restrictions
+    # REST API call to get Main Site IP and SCM IP restrictions
     $mainSiteIpRestrictionsUri = "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$WebAppRGName/providers/Microsoft.Web/sites/$WebAppName/config/web?api-version=$APIVersion"
     $mainSiteIpRestrictionsResponse = Invoke-RestMethod -Uri $mainSiteIpRestrictionsUri -Headers $headers -Method Get
     $mainSiteIpRestrictions = $mainSiteIpRestrictionsResponse.properties.ipSecurityRestrictions
