@@ -88,6 +88,9 @@ Each part of the script is well-documented with inline comments, explaining the 
 - You can modify the `$backupDaysAgoLimit` variable to change the threshold for checking outdated backups.
 - You can customize the `alert` function to integrate with logging systems, notification services (e.g., SendGrid), or IT ticketing systems (e.g., ServiceNow).
 
+## Output
+![image](https://github.com/user-attachments/assets/4501c566-3de8-4137-af73-4bdecfb72ca5)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
