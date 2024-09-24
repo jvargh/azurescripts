@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Disclaimer:
+# This script is provided "as is" without any warranty of any kind, either express or implied.
+# The use of this script is at your own risk. The authors and contributors are not responsible
+# for any damage or loss, including but not limited to data loss or system corruption, that
+# may result from the use of this script.
+#
+# Before running this script, ensure that you have appropriate backups and have tested it in a
+# controlled environment. It is recommended to review the code and modify it to suit your specific
+# environment and requirements.
+#
+# By using this script, you agree to these terms and assume full responsibility for its use.
+
 # Step 1: Check installed kernels and current booted kernel
 echo "Checking installed kernels..."
 INSTALLED_KERNELS=$(rpm -qa | grep -i kernel | grep -v kernel-headers)
