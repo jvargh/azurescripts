@@ -54,7 +54,7 @@ Before running the script, ensure the following:
 ## How to Use
 
 1. **Clone or Download the Script**:
-    Download the `02_disk_health_check.sh` script to your server.
+    Download the `disk_health_check.sh` script to your server.
    
 2. **Edit Configuration**:
     Modify the `RESOURCE_GROUP` variable in the script to reflect the Azure resource group where your VMs are located.
@@ -67,7 +67,7 @@ Before running the script, ensure the following:
     The script requires root privileges, so run it with `sudo`:
 
     ```bash
-    sudo ./02_disk_health_check.sh
+    sudo ./disk_health_check.sh
     ```
 
 4. **Check the Output**:
