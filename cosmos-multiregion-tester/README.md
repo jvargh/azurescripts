@@ -53,6 +53,8 @@ To deploy the required Azure Cosmos DB infrastructure:
 
 ### **2. Configure the Application**
 Update the application with the details from the ARM deployment:
+- Following .NET Nuget packages were used:
+![image](https://github.com/user-attachments/assets/e251a8ec-5be6-444e-857c-8876490e700f)
 - In the `Program.cs` file or `appsettings.json`, replace placeholders with:
   - `EndpointUri`: Cosmos DB Account URI.
   - `PrimaryKey`: Cosmos DB Account Key.
