@@ -42,7 +42,7 @@ To deploy the required Azure Cosmos DB infrastructure:
      --template-file cosmosdb-arm-template.json
    ```
 2. The ARM template will:
-   - Create a Cosmos DB account with **multi-region writes enabled**.
+   - Create a Cosmos DB account with **multi-region writes enabled**. In this example following regions were used: "East US 2", "Central US", "West US".
    - Configure the database and container.
    - Enable multiple regions for replication.
 
