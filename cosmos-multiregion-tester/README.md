@@ -10,7 +10,7 @@ This project demonstrates various operations and configurations in Azure Cosmos 
 3. [Prerequisites](#prerequisites)
 4. [Code Overview](#code-overview)
 5. [Running the Project](#running-the-project)
-6. [Comparison of Multi-Region Writes vs. Single Write Region](#Comparison-of-Multi-Region-Writes-vs.-Single-Write-Region)
+6. [Comparison of Multi-Region Writes vs. Single Write Region](https://github.com/jvargh/azurescripts/blob/main/cosmos-multiregion-tester/README.md#comparison-of-multi-region-writes-vs-single-write-region)
 7. [Contributing](#contributing)
 8. [License](#license)
 
