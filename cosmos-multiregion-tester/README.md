@@ -10,8 +10,9 @@ This project demonstrates various operations and configurations in Azure Cosmos 
 3. [Prerequisites](#prerequisites)
 4. [Code Overview](#code-overview)
 5. [Running the Project](#running-the-project)
-6. [Contributing](#contributing)
-7. [License](#license)
+6. [Comparison of Multi-Region Writes vs. Single Write Region](#Comparison-of-Multi-Region-Writes-vs.-Single-Write-Region)
+7. [Contributing](#contributing)
+8. [License](#license)
 
 ---
 
@@ -102,6 +103,26 @@ The project code executes the following steps sequentially:
      - Data replication across regions.
      - Performance and RU costs for each consistency level.
      - Results of failover scenarios.
+
+---
+
+### **Comparison of Multi-Region Writes vs. Single Write Region**
+This table summarizes the key differences between Multi-Region Writes and Single Write Region configurations in Azure Cosmos DB across functionality, cost, and performance aspects.
+| **Category**           | **Aspect**             | **Multi-Region Writes**                                                                 | **Single Write Region**                                                       |
+|-------------------------|------------------------|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| **Functionality**       | **Write Availability** | Enables writes in all configured regions, improving availability during regional outages | Writes are only allowed in the primary region; failover required for other regions |
+|                         | **Conflict Resolution** | Requires conflict resolution mechanisms (e.g., Last-Write-Wins or custom policies)       | No conflict resolution required since all writes are directed to one region   |
+|                         | **Consistency**       | Strong Consistency not supported; Bounded Staleness is the strongest available          | All consistency levels, including Strong Consistency, are supported          |
+|                         | **Failover Behavior** | Failover does not disrupt writes; other regions can continue writing seamlessly         | Write operations stop until a failover promotes a secondary region to primary |
+|                         | **Application Design** | Applications must handle potential data conflicts and rely on conflict resolution        | Simpler application design due to centralized write location                 |
+| **Cost**               | **RU (Request Units)** | Write operations may incur slightly higher RU costs due to maintaining multiple replicas| Lower RU costs as writes are replicated only from one region to others       |
+|                         | **Storage Costs**     | No difference; storage costs depend on data volume and replication                      | No difference; storage costs depend on data volume and replication           |
+|                         | **Provisioned Throughput** | Requires write throughput to be provisioned independently for each region              | Write throughput is only provisioned for the primary region                 |
+|                         | **Data Transfer Costs** | Increased cross-region data transfer costs for synchronizing writes between regions    | Lower cross-region transfer costs as writes are replicated only from primary |
+| **Performance**         | **Write Latency**     | Lower latency for writes when the application is closer to the region being written to  | Higher latency for applications writing from regions far from the primary    |
+|                         | **Read Latency**      | No difference; both support local read replicas in all regions for low-latency reads    | No difference; both support local read replicas in all regions for low-latency reads |
+|                         | **Conflict Handling** | Applications may experience slight delays or complexity when resolving conflicts         | No conflict handling overhead                                                |
+|                         | **Replication**       | Writes are replicated asynchronously across all write regions                           | Writes are replicated asynchronously to secondary read regions only          | 
 
 ---
 
