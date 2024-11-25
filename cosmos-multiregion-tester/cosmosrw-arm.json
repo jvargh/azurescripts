@@ -1,0 +1,133 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "apiVersion": "2021-04-15",
+      "name": "[parameters('accountName')]",
+      "location": "[parameters('primaryLocation')]",
+      "kind": "GlobalDocumentDB",
+      "properties": {
+        "databaseAccountOfferType": "Standard",
+        "locations": [
+          {
+            "locationName": "[parameters('primaryLocation')]",
+            "failoverPriority": 0
+          },
+          {
+            "locationName": "[parameters('secondaryLocation1')]",
+            "failoverPriority": 1
+          },
+          {
+            "locationName": "[parameters('secondaryLocation2')]",
+            "failoverPriority": 2
+          }
+        ],
+        "enableAutomaticFailover": true,
+        "enableMultipleWriteLocations": true,
+        "consistencyPolicy": {
+          "defaultConsistencyLevel": "Session"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+      "apiVersion": "2021-04-15",
+      "name": "[format('{0}/{1}', parameters('accountName'), parameters('databaseName'))]",
+      "properties": {
+        "resource": {
+          "id": "[parameters('databaseName')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('accountName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+      "apiVersion": "2021-04-15",
+      "name": "[format('{0}/{1}/{2}', parameters('accountName'), parameters('databaseName'), parameters('containerName'))]",
+      "properties": {
+        "resource": {
+          "id": "[parameters('containerName')]",
+          "partitionKey": {
+            "paths": [
+              "[parameters('partitionKeyPath')]"
+            ],
+            "kind": "Hash"
+          },
+          "defaultTtl": -1
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('accountName'), parameters('databaseName'))]"
+      ]
+    }
+  ],
+  "parameters": {
+    "accountName": {
+      "type": "string",
+      "defaultValue": "my-cosmosdb-account",
+      "metadata": {
+        "description": "The name of the Azure Cosmos DB account."
+      }
+    },
+    "primaryLocation": {
+      "type": "string",
+      "defaultValue": "East US",
+      "metadata": {
+        "description": "Primary region for the Cosmos DB account."
+      }
+    },
+    "secondaryLocation1": {
+      "type": "string",
+      "defaultValue": "West US",
+      "metadata": {
+        "description": "First secondary region for the Cosmos DB account."
+      }
+    },
+    "secondaryLocation2": {
+      "type": "string",
+      "defaultValue": "Central US",
+      "metadata": {
+        "description": "Second secondary region for the Cosmos DB account."
+      }
+    },
+    "databaseName": {
+      "type": "string",
+      "defaultValue": "my-database",
+      "metadata": {
+        "description": "The name of the database."
+      }
+    },
+    "containerName": {
+      "type": "string",
+      "defaultValue": "my-container",
+      "metadata": {
+        "description": "The name of the container."
+      }
+    },
+    "partitionKeyPath": {
+      "type": "string",
+      "defaultValue": "/partitionKey",
+      "metadata": {
+        "description": "The partition key path for the container."
+      }
+    }
+  },
+  "outputs": {
+    "cosmosDbAccountName": {
+      "type": "string",
+      "value": "[parameters('accountName')]"
+    },
+    "cosmosDbDatabaseName": {
+      "type": "string",
+      "value": "[parameters('databaseName')]"
+    },
+    "cosmosDbContainerName": {
+      "type": "string",
+      "value": "[parameters('containerName')]"
+    }
+  }
+}
