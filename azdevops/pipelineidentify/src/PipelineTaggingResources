@@ -1,0 +1,98 @@
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  pipelineName: $(System.DefinitionName) # Pipeline Name
+  pipelineId: $(System.DefinitionId)     # Pipeline ID
+  runId: $(Build.BuildId)                # Run ID
+  resourceGroup: 'AzureDevOps-rg'
+  vnetName: 'AzureDevOps-vnet'
+  subnetName: 'AzureDevOps-vnet-subnet1'
+  azServiceConnection: 'AzureDevOps-ServiceConnection'
+  appServicePlanName: 'AzureDevOps-app-service-plan' 
+  functionAppName: 'AzureDevOpsFunctionApp'  
+  azStorageAccount: 'azuredevopsstoragetest01'
+
+stages:
+  - stage: Deploy
+    jobs:
+      - job: DeployFunctionApp
+        steps:
+          # Step 1: Log Pipeline Name, ID, and Run ID
+          - script: |
+              echo "Pipeline Name: $(pipelineName)"
+              echo "Pipeline ID: $(pipelineId)"
+              echo "Run ID: $(runId)"
+            displayName: 'Log Pipeline Information'
+
+          # Step 2: Create App Service Plan with Tags
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: $(azServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                # Create App Service Plan with Tags
+                az appservice plan create \
+                  --name $(appServicePlanName) \
+                  --resource-group $(resourceGroup) \
+                  --location eastus2 \
+                  --tags "PipelineName=$(pipelineName)" "PipelineId=$(pipelineId)" "RunId=$(runId)"
+
+                # Log Tags in App Service Plan
+                echo "App Service Plan Tags:"
+                az resource show \
+                  --resource-group $(resourceGroup) \
+                  --name $(appServicePlanName) \
+                  --resource-type "Microsoft.Web/serverfarms" \
+                  --query tags
+
+          # Step 3: Deploy Azure Function App with Tags
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: $(azServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                # Deploy Function App with Tags
+                az functionapp create \
+                  --name $(functionAppName) \
+                  --resource-group $(resourceGroup) \
+                  --plan $(appServicePlanName) \
+                  --runtime dotnet \
+                  --os-type Windows \
+                  --storage-account $(azStorageAccount) \
+                  --tags "PipelineName=$(pipelineName)" "PipelineId=$(pipelineId)" "RunId=$(runId)"
+
+                # Enable VNet Integration
+                az functionapp vnet-integration add \
+                  --name $(functionAppName) \
+                  --resource-group $(resourceGroup) \
+                  --vnet $(vnetName) \
+                  --subnet $(subnetName)
+
+                # Log Tags in Function App
+                echo "Function App Tags:"
+                az resource show \
+                  --resource-group $(resourceGroup) \
+                  --name $(functionAppName) \
+                  --resource-type "Microsoft.Web/sites" \
+                  --query tags
+
+          # # Step 4: Deploy Function App Code
+          # - task: AzureFunctionApp@1
+          #   inputs:
+          #     azureSubscription: 'AzureDevOps-ServiceConnection' 
+          #     appType: 'functionApp'
+          #     appName: $(functionAppName)
+          #     package: '$(Build.ArtifactStagingDirectory)/AzureDevOpsFnApp01.zip'
+          #     resourceGroupName: $(resourceGroup)
+
+          # Step 5: Publish Pipeline Logs
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)'
+              ArtifactName: 'logs'
+              publishLocation: 'Container'
