@@ -161,7 +161,8 @@ This approach uses Azure Activity Logs to extract key metadata (e.g., subscripti
   - `RunId`
   - `LogId`
     
-![image](https://github.com/user-attachments/assets/15509e57-2959-4148-92b9-06bc5cb24d4d)
+![image](https://github.com/user-attachments/assets/f92e3e7b-d6ce-49e4-b946-12d2bd7f6d1f)
+
 
 ---
 
