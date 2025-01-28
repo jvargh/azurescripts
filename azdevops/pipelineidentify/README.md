@@ -40,7 +40,8 @@ In this approach, Azure resources (e.g., App Service Plans, Function Apps) are t
 - Resources are tagged with:
   - `PipelineName`, `PipelineId`, `RunId` and will look as seen below
     
-    ![image](https://github.com/user-attachments/assets/d03949df-fe8a-4fb9-b3d7-a149deab29af)
+    ![image](https://github.com/user-attachments/assets/14d1b820-5ab0-402f-8059-63c31cf2d294)
+
     
 - The pipeline logs display the tags for verification.
 - Published logs contain metadata for audit purposes.
