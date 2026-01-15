@@ -26,7 +26,11 @@ Get started in 2 minutes:
 ### Installation
 
 ```bash
-# Install dependencies
+# Step 1: Copy the environment template and configure with your Azure values
+cp .env.template .env
+# Edit .env and fill in your Azure subscription, resource group, and health model name
+
+# Step 2: Install dependencies
 pip install -r requirements.txt
 
 # Run setup and query (all-in-one)
@@ -794,3 +798,4 @@ For questions or issues:
 
 *Last Updated: January 15, 2026*
 *Version: 1.0.0*
+
