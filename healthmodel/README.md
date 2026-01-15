@@ -135,6 +135,105 @@ Expected output:
 
 ---
 
+
+## Azure REST APIs Used
+
+This integration uses the following Azure Management REST APIs:
+
+### Base API Configuration
+- **Provider**: `Microsoft.CloudHealth`
+- **Resource Type**: `healthmodels`
+- **API Version**: `2025-05-01-preview`
+- **Authentication**: Azure Management API Bearer Token
+- **Base URL**: `https://management.azure.com`
+
+### Primary Endpoints
+
+#### 1. Get All Entities Health (Main API)
+```
+GET /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CloudHealth/healthmodels/{healthModelName}/entities?api-version=2025-05-01-preview
+```
+
+**Purpose**: Retrieves health state of all entities in the health model
+
+**Response**: Array of entities with:
+- Entity ID and name
+- Health state (Healthy/Degraded/Unhealthy/Unknown)
+- Resource type (e.g., Microsoft.Web/sites)
+- Signals and metrics
+- Timestamp
+
+**Used by**: `get_all_entities_health()` - Primary function in `run.py`
+
+#### 2. Get Single Entity Health
+```
+GET /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CloudHealth/healthmodels/{healthModelName}/entities/{entityId}?api-version=2025-05-01-preview
+```
+
+**Purpose**: Retrieves health state of a specific entity
+
+**Used by**: `get_entity_health()`, `get_workload_health()`
+
+#### 3. Get Entity Health Timeline (Optional)
+```
+GET /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CloudHealth/healthmodels/{healthModelName}/entities/{entityId}/timeline?api-version=2025-05-01-preview&startTime={iso8601}&endTime={iso8601}&intervalMinutes=5
+```
+
+**Purpose**: Retrieves historical health states over time
+
+**Used by**: `get_entity_health_timeline()` - Available but not used in main demo
+
+### Authentication
+
+The integration uses Azure CLI for authentication:
+
+```bash
+az account get-access-token --resource https://management.azure.com
+```
+
+This returns a bearer token that is automatically included in all API requests.
+
+### API Response Format
+
+All endpoints return JSON with this structure:
+
+```json
+{
+  "id": "/subscriptions/.../entities/{entityId}",
+  "name": "entity-name",
+  "type": "Microsoft.CloudHealth/healthmodels/entities",
+  "properties": {
+    "healthState": "Healthy",
+    "displayName": "sre-demo-app",
+    "kind": "Microsoft.Web/sites",
+    "impact": "Standard",
+    "timestamp": "2026-01-15T...",
+    "signals": []
+  }
+}
+```
+
+### Health State Mapping
+
+The integration normalizes health states to color codes:
+
+| API State | Enum | Color Code | Emoji |
+|-----------|------|------------|-------|
+| Healthy | HEALTHY | green | 🟢 |
+| Degraded | DEGRADED | amber | 🟡 |
+| Unhealthy | UNHEALTHY | red | 🔴 |
+| Unknown | UNKNOWN | gray | ⚪ |
+
+### Example API Flow
+
+1. **Authenticate**: `az account get-access-token` → Bearer token
+2. **Query All Entities**: `GET .../entities` → Returns all entities
+3. **Normalize**: Map health states to colors
+4. **Aggregate**: Calculate summary statistics (healthy/degraded/unhealthy counts)
+5. **Display**: Show formatted results with emojis
+
+---
+
 ## API Reference
 
 ### HealthModelBuilder
@@ -798,4 +897,5 @@ For questions or issues:
 
 *Last Updated: January 15, 2026*
 *Version: 1.0.0*
+
 
