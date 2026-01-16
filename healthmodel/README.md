@@ -795,6 +795,8 @@ integration = HealthModelBuilder.create_from_env()
 ```
 
 ---
+## Health Model Graph
+<img width="894" height="463" alt="image" src="https://github.com/user-attachments/assets/82e6410a-65cd-477f-a53c-549bd779643e" />
 
 ## Example Output
 
